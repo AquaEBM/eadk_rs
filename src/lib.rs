@@ -123,7 +123,7 @@ pub mod kandinsky {
 
         let draw = |x, y| set_pixel(x, y, col);
 
-        while sx < sy {
+        while sx >= sy {
             draw(x + sx, y + sy);
             draw(x - sx, y + sy);
             draw(x + sx, y - sy);
