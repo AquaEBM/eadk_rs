@@ -1,4 +1,4 @@
-use core::{cell::Cell, ffi::c_char, mem::MaybeUninit, ops::{Add, AddAssign}};
+use core::{cell::Cell, mem::MaybeUninit, ops::{Add, AddAssign}};
 
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Debug, Hash, Default)]
 #[repr(C)]
@@ -76,6 +76,9 @@ extern "C" {
     fn eadk_display_draw_string(text: *const u8, point: Point, big: bool, col: Color, bg: Color);
 }
 
+/// # Safety
+/// 
+/// text must not be null, dangling, mutably aliased, be null_terminated, and only contain valid ascii
 #[inline]
 pub unsafe fn draw_string_unchecked(text: *const u8, point: Point, big: bool, col: Color, bg: Color) {
     unsafe { eadk_display_draw_string(text, point, big, col, bg) }
