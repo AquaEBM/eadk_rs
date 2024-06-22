@@ -1,4 +1,4 @@
-use core::{cell::Cell, mem::MaybeUninit, ops::{Add, AddAssign}};
+use core::{cell::Cell, ffi::c_char, mem::MaybeUninit, ops::{Add, AddAssign}};
 
 #[repr(C)]
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Debug, Hash, Default)]
@@ -73,11 +73,11 @@ extern "C" {
     fn eadk_display_push_rect(rect: Rect, color: *const Color);
     fn eadk_display_wait_for_vblank() -> bool;
     fn eadk_display_pull_rect(rect: Rect, pixels: *mut Color);
-    fn eadk_display_draw_string(text: *const u8, point: Point, big: bool, col: Color, bg: Color);
+    fn eadk_display_draw_string(text: *const c_char, point: Point, big: bool, col: Color, bg: Color);
 }
 
 #[inline]
-pub fn draw_string_unchecked(text: *const u8, point: Point, big: bool, col: Color, bg: Color) {
+pub unsafe fn draw_string_unchecked(text: *const c_char, point: Point, big: bool, col: Color, bg: Color) {
     unsafe { eadk_display_draw_string(text, point, big, col, bg) }
 }
 
