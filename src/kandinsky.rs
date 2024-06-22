@@ -228,7 +228,7 @@ pub fn draw_line(mut start: Point, end: Point, col: Color) {
 
 pub fn draw_circle(center: Point, r: u16, col: Color) {
     let mut sx = r as i16;
-    let mut t1 = sx / 16;
+    let mut t1 = sx >> 4;
     let mut sy = 0;
 
     while sx >= sy {
@@ -240,13 +240,13 @@ pub fn draw_circle(center: Point, r: u16, col: Color) {
         sx = -sx;
         set_pixel(center + [sx, sy], col);
         (sx, sy) = (sy, sx);
-        set_pixel(center + [sy, sx], col);
+        set_pixel(center + [sx, sy], col);
         sy = -sy;
-        set_pixel(center + [sy, sx], col);
+        set_pixel(center + [sx, sy], col);
         sx = -sx;
-        set_pixel(center + [sy, sx], col);
+        set_pixel(center + [sx, sy], col);
         sy = -sy;
-        set_pixel(center + [sy, sx], col);
+        set_pixel(center + [sx, sy], col);
         (sx, sy) = (sy, sx);
 
         sy += 1;
