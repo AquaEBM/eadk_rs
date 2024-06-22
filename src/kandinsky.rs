@@ -247,6 +247,7 @@ pub fn draw_circle(center: Point, r: u16, col: Color) {
         set_pixel(center + [sy, sx], col);
         sy = -sy;
         set_pixel(center + [sy, sx], col);
+        (sx, sy) = (sy, sx);
 
         sy += 1;
         t1 += sy;
