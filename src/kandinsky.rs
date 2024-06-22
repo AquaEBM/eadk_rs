@@ -1,7 +1,7 @@
 use core::{cell::Cell, ffi::c_char, mem::MaybeUninit, ops::{Add, AddAssign}};
 
-#[repr(C)]
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Debug, Hash, Default)]
+#[repr(C)]
 pub struct Point {
     pub x: i16,
     pub y: i16,
@@ -29,8 +29,8 @@ impl AddAssign<[i16; 2]> for Point {
     }
 }
 
-#[repr(C)]
 #[derive(Clone, Copy, PartialEq, Eq, Debug, Hash, Default)]
+#[repr(C)]
 pub struct Rect {
     pub point: Point,
     pub w: u16,
@@ -53,8 +53,8 @@ impl Rect {
     }
 }
 
-#[repr(C)]
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Debug, Hash, Default)]
+#[repr(C)]
 pub struct Color(pub u16);
 
 impl Color {
@@ -73,12 +73,12 @@ extern "C" {
     fn eadk_display_push_rect(rect: Rect, color: *const Color);
     fn eadk_display_wait_for_vblank() -> bool;
     fn eadk_display_pull_rect(rect: Rect, pixels: *mut Color);
-    fn eadk_display_draw_string(text: *const c_char, x: i16, y: i16, big: u8, col: Color, bg: Color);
+    fn eadk_display_draw_string(text: *const c_char, point: Point, big: u8, col: Color, bg: Color);
 }
 
 #[inline]
 pub unsafe fn draw_string_unchecked(text: *const c_char, point: Point, big: u8, col: Color, bg: Color) {
-    unsafe { eadk_display_draw_string(text, point.x, point.y, big, col, bg) }
+    unsafe { eadk_display_draw_string(text, point, big, col, bg) }
 }
 
 #[inline]
