@@ -1,4 +1,8 @@
-use core::{cell::Cell, mem::MaybeUninit, ops::{Add, AddAssign}};
+use core::{
+    cell::Cell,
+    mem::MaybeUninit,
+    ops::{Add, AddAssign},
+};
 
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Debug, Hash, Default)]
 #[repr(C)]
@@ -41,7 +45,7 @@ impl Rect {
     #[inline]
     #[must_use]
     pub fn surface_area(&self) -> u32 {
-        self.w as u32 * self.h as u32
+        u32::from(self.w) * u32::from(self.h)
     }
 
     #[inline]
@@ -61,8 +65,8 @@ impl Color {
     #[inline]
     #[must_use]
     pub const fn from_rgb([r, g, b]: [u8; 3]) -> Self {
-        let r = u16::from_be_bytes([r & 0b11111000, 0]);
-        let g = ((g & 0b11111100) as u16) << 3;
+        let r = u16::from_be_bytes([r & 0b1111_1000, 0]);
+        let g = ((g & 0b1111_1100) as u16) << 3;
         let b = (b >> 3) as u16;
         Self(r | g | b)
     }
@@ -77,17 +81,23 @@ extern "C" {
 }
 
 /// # Safety
-/// 
-/// text must not be null, dangling, mutably aliased, be null_terminated, and only contain valid ascii
+///
+/// text must not be non-null, and null terminated.
 #[inline]
-pub unsafe fn draw_string_unchecked(text: *const u8, point: Point, big: bool, col: Color, bg: Color) {
+pub unsafe fn draw_string_unchecked(
+    text: *const u8,
+    point: Point,
+    big: bool,
+    col: Color,
+    bg: Color,
+) {
     unsafe { eadk_display_draw_string(text, point, big, col, bg) }
 }
 
 #[inline]
 #[must_use]
 pub fn try_pull_rect(rect: Rect, pixels: &mut [Color]) -> bool {
-    if pixels.len() > rect.surface_area() as usize {
+    if pixels.len() < rect.surface_area() as usize {
         return false;
     }
 
@@ -101,7 +111,7 @@ pub fn try_pull_rect(rect: Rect, pixels: &mut [Color]) -> bool {
 #[inline]
 #[must_use]
 pub fn try_pull_rect_cell(rect: Rect, pixels: &[Cell<Color>]) -> bool {
-    if pixels.len() > rect.surface_area() as usize {
+    if pixels.len() < rect.surface_area() as usize {
         return false;
     }
 
@@ -112,6 +122,9 @@ pub fn try_pull_rect_cell(rect: Rect, pixels: &[Cell<Color>]) -> bool {
     true
 }
 
+/// # Panics
+/// 
+/// if `pixels.len()` < `rect.surface_area()`
 #[inline]
 pub fn pull_rect(rect: Rect, pixels: &mut [Color]) {
     assert!(
@@ -121,9 +134,12 @@ pub fn pull_rect(rect: Rect, pixels: &mut [Color]) {
         rect.w,
         rect.h,
         rect.surface_area(),
-    )
+    );
 }
 
+/// # Panics
+/// 
+/// if `pixels.len()` < `rect.surface_area()`
 #[inline]
 pub fn pull_rect_cell(rect: Rect, pixels: &[Cell<Color>]) {
     assert!(
@@ -133,7 +149,7 @@ pub fn pull_rect_cell(rect: Rect, pixels: &[Cell<Color>]) {
         rect.w,
         rect.h,
         rect.surface_area(),
-    )
+    );
 }
 
 #[inline]
@@ -149,7 +165,7 @@ pub fn get_pixel(point: Point) -> Color {
 #[inline]
 #[must_use]
 pub fn try_draw_rect(rect: Rect, pixels: &[Color]) -> bool {
-    if pixels.len() > rect.surface_area() as usize {
+    if pixels.len() < rect.surface_area() as usize {
         return false;
     }
 
@@ -160,6 +176,9 @@ pub fn try_draw_rect(rect: Rect, pixels: &[Color]) -> bool {
     true
 }
 
+/// # Panics
+/// 
+/// if `pixels.len()` < `rect.surface_area()`
 #[inline]
 pub fn draw_rect(rect: Rect, pixels: &[Color]) {
     assert!(
@@ -185,6 +204,7 @@ pub fn set_pixel(point: Point, col: Color) {
 }
 
 #[inline]
+#[must_use]
 pub fn wait_for_vblank() -> bool {
     unsafe { eadk_display_wait_for_vblank() }
 }

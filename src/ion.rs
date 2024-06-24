@@ -189,10 +189,18 @@ extern "C" {
 }
 
 impl Event {
-    pub const DIGITS: [Self; 10] = {
-        use Event::*;
-        [Zero, One, Two, Three, Four, Five, Six, Seven, Eight, Nine]
-    };
+    pub const DIGITS: [Self; 10] = [
+        Event::Zero,
+        Event::One,
+        Event::Two,
+        Event::Three,
+        Event::Four,
+        Event::Five,
+        Event::Six,
+        Event::Seven,
+        Event::Eight,
+        Event::Nine,
+    ];
 
     #[inline]
     #[must_use]

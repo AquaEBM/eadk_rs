@@ -27,7 +27,7 @@ pub mod time {
 
     #[inline]
     #[must_use]
-    pub fn time_ms() -> u64 {
+    pub fn millis() -> u64 {
         unsafe { eadk_timing_millis() }
     }
 }
@@ -40,7 +40,7 @@ pub mod random {
 
     #[inline]
     #[must_use]
-    pub fn random() -> u32 {
+    pub fn randint() -> u32 {
         unsafe { eadk_random() }
     }
 
@@ -48,7 +48,7 @@ pub mod random {
     /// with a precision of 2^(-23)
     #[inline]
     #[must_use]
-    pub fn random_float() -> f32 {
-        f32::from_bits(random() >> 9 | 0x3f800000) - 1.
+    pub fn uniform() -> f32 {
+        f32::from_bits(randint() >> 9 | 0x3f80_0000) - 1.
     }
 }
