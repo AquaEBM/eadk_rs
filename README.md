@@ -30,7 +30,7 @@ eadk = { git = "https://github.com/AquaEBM/eadk_rs.git" }
 - Then copy the following example code into `src/main.rs`:
 
 ```rust
-// src/main.rs
+//! Template Epsilon App
 #![no_std]
 #![no_main]
 
@@ -48,7 +48,7 @@ static API_LEVEL: u32 = 0;
 
 #[used]
 #[link_section = ".rodata.eadk_app_icon"]
-/// Bytes of an LZ4-compressed RGB565 55x56 pixels image
+/// Bytes of an LZ4-compressed RGB565 55x56 pixels image.
 static ICON: [u8; 4250] = *include_bytes!("icon.nwi");
 
 #[no_mangle]
