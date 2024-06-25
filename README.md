@@ -23,8 +23,9 @@ cd epsilon_app
 
 # ...
 eadk = { git = "https://github.com/AquaEBM/eadk_rs.git" }
-
 ```
+
+- Copy the `icon.nwi` at the root of this repository to the `src` directory of your project.
 
 - Then copy the following example code into `src/main.rs`:
 
