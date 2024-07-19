@@ -2,13 +2,13 @@
 
 Safe bindings to [Numworks](https://www.numworks.com/)' Epsilon App Development Kit.
 
-## How to create a custom App for your Numworks Calculator
+## How to create and install a custom app for your Numworks Calculator
 
 - In your terminal, create a new Rust binary project with cargo:
 
 ```shell
-cargo new --bin epsilon_app
-cd epsilon_app
+cargo new --bin <your_app_name>
+cd <your_app_name>
 ```
 
 - You might want to add this crate as a dependency in the newly created `Cargo.toml` file:
@@ -25,7 +25,7 @@ cd epsilon_app
 eadk = { git = "https://github.com/AquaEBM/eadk_rs.git" }
 ```
 
-- Copy the `icon.nwi` at the root of this repository to the `src` directory of your project.
+- Copy the [`icon.nwi`](icon.nwi) file at the root of this repository to the `src` directory of your project.
 
 - Then copy the following example code into `src/main.rs`:
 
@@ -91,10 +91,10 @@ fn panic(_info: &PanicInfo) -> ! {
 - Then, build your app:
 
 ```shell
-cargo build -r --target=thumbv7em-none-eabihf
+cargo rustc build -r --target=thumbv7em-none-eabihf -- -Clink-arg=--relocatable -Clink-arg=-no-gc-sections
 ```
 
 - Finally, connect your calculator via USB to your device, and follow the instructions in [this website](https://my.numworks.com/apps) to upload it. The file you need to upload is exactly:
 ```
-target/thumbv7em-none-eabihf/release/epsilon_app
+target/thumbv7em-none-eabihf/release/<your_app_name>
 ```
